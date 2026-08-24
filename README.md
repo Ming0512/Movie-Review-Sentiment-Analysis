@@ -1,5 +1,3 @@
-# IMDB Sentiment Analyzer
-
 pip install -r requirements.txt
 python main.py        # runs all 4 pipeline stages
 python app.py          # http://localhost:5000
