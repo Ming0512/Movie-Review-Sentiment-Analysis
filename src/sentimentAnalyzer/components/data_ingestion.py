@@ -1,4 +1,5 @@
 import numpy as np
+
 from tensorflow.keras.datasets import imdb
 
 from src.sentimentAnalyzer.logging import logger
