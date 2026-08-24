@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Review Verdict — Sentiment Checker</title>
+
+  <style>
+    :root {
+      --bg: #16181d;
+      --panel: #1e2128;
+      --rule: #33373f;
+      --ink: #e9e6dd;
+      --ink-dim: #9a9da6;
+      --marquee: #f4b942;
+      --positive: #6fae5f;
+      --negative: #c25b4a;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      background-image:
+        repeating-linear-gradient(
+          90deg,
+          rgba(255,255,255,0.02) 0px,
+          rgba(255,255,255,0.02) 1px,
+          transparent 1px,
+          transparent 48px
+        );
+      color: var(--ink);
+      font-family: "Courier New", ui-monospace, monospace;
+      display: flex;
+      justify-content: center;
+      padding: 48px 20px 80px;
+    }
+
+    .ticket {
+      width: 100%;
+      max-width: 620px;
+    }
+
+    .film-strip {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 28px;
+    }
+
+    .film-strip span {
+      width: 14px;
+      height: 20px;
+      background: var(--rule);
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+
+    .marquee {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 13px;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--marquee);
+      margin: 0 0 6px;
+    }
+
+    h1 {
+      font-family: Georgia, "Times New Roman", serif;
+      font-weight: 400;
+      font-size: 34px;
+      line-height: 1.15;
+      margin: 0 0 8px;
+    }
+
+    .subhead {
+      color: var(--ink-dim);
+      font-size: 13px;
+      margin: 0 0 28px;
+      line-height: 1.6;
+    }
+
+    form {
+      background: var(--panel);
+      border: 1px solid var(--rule);
+      border-radius: 6px;
+      padding: 24px;
+    }
+
+    label {
+      display: block;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--marquee);
+      margin-bottom: 10px;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 130px;
+      resize: vertical;
+      background: #14161b;
+      border: 1px solid var(--rule);
+      border-radius: 4px;
+      color: var(--ink);
+      font-family: inherit;
+      font-size: 14px;
+      line-height: 1.6;
+      padding: 14px;
+    }
+
+    textarea::placeholder {
+      color: #5c606a;
+    }
+
+    textarea:focus {
+      outline: none;
+      border-color: var(--marquee);
+    }
+
+    .row {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 16px;
+    }
+
+    button {
+      background: var(--marquee);
+      color: #16181d;
+      border: none;
+      border-radius: 4px;
+      font-family: inherit;
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 12px 22px;
+      cursor: pointer;
+      transition: transform 0.1s ease;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+    }
+
+    button:focus-visible {
+      outline: 2px solid var(--ink);
+      outline-offset: 2px;
+    }
+
+    .verdict {
+      margin-top: 28px;
+      border: 1px solid var(--rule);
+      border-radius: 6px;
+      padding: 22px 24px;
+      background: var(--panel);
+    }
+
+    .verdict .eyebrow {
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-dim);
+      margin-bottom: 10px;
+    }
+
+    .verdict-label {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 30px;
+      margin: 0 0 6px;
+    }
+
+    .verdict-label.positive {
+      color: var(--positive);
+    }
+
+    .verdict-label.negative {
+      color: var(--negative);
+    }
+
+    .score {
+      font-size: 13px;
+      color: var(--ink-dim);
+    }
+
+    .score b {
+      color: var(--ink);
+    }
+
+    .reviewed-text {
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid var(--rule);
+      font-size: 13px;
+      color: var(--ink-dim);
+      line-height: 1.6;
+      font-style: italic;
+    }
+
+    .error {
+      margin-top: 24px;
+      border: 1px solid var(--negative);
+      border-radius: 6px;
+      padding: 16px 18px;
+      color: var(--negative);
+      font-size: 13px;
+      background: rgba(194, 91, 74, 0.08);
+    }
+
+    footer {
+      margin-top: 40px;
+      font-size: 11px;
+      color: #5c606a;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="ticket">
+
+    <div class="film-strip" aria-hidden="true">
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+
+    <p class="marquee">Now Screening</p>
+
+    <h1>The Review Verdict</h1>
+
+    <p class="subhead">
+      Paste a movie review below. A SimpleRNN trained on the IMDB dataset
+      will read it and hand down a verdict — positive or negative — with
+      a confidence score.
+    </p>
+
+    <form method="POST" action="/predict">
+
+      <label for="review">Your Review</label>
+
+      <textarea
+        id="review"
+        name="review"
+        placeholder="Type or paste a movie review here, e.g. &quot;This film was a masterpiece from start to finish, I was captivated the whole way through.&quot;"
+      >{{ review or "" }}</textarea>
+
+      <div class="row">
+        <button type="submit">Check Sentiment</button>
+      </div>
+
+    </form>
+
+    {% if error %}
+    <div class="error">
+      {{ error }}
+    </div>
+    {% endif %}
+
+
+    {% if label %}
+    <div class="verdict">
+
+      <p class="eyebrow">Verdict</p>
+
+      <p class="verdict-label {{ 'positive' if label == 'Positive' else 'negative' }}">
+        {{ label }}{{ ' ★' if label == 'Positive' else ' ✖' }}
+      </p>
+
+      <p class="score">
+        Confidence score:
+        <b>{{ score }}</b>
+        &nbsp;(0.0 = negative, 1.0 = positive)
+      </p>
+
+      <div class="reviewed-text">
+        &ldquo;{{ review }}&rdquo;
+      </div>
+
+    </div>
+    {% endif %}
+
+    <footer>
+      Model: SimpleRNN &middot;
+      Trained on Keras IMDB dataset &middot;
+      Running locally
+    </footer>
+
+  </main>
+
+</body>
+</html>

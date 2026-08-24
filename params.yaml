@@ -1,0 +1,22 @@
+DataParams:
+  num_words: 10000
+  max_length: 102
+  padding: "post"
+  truncating: "post"
+
+ModelParams:
+  embedding_dim: 32
+  rnn_units: 32
+  dropout: 0.01
+  recurrent_dropout: 0.0
+
+TrainingParams:
+  epochs: 30
+  batch_size: 64
+  validation_split: 0.2
+  early_stopping_patience: 3
+  random_seed: 42
+  monitor_metric: "val_accuracy"
+
+InferenceParams:
+  positive_threshold: 0.7
