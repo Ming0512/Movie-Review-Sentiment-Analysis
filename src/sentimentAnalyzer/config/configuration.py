@@ -7,6 +7,7 @@ from src.sentimentAnalyzer.entity import (
     ModelEvaluationConfig,
 )
 
+
 class ConfigurationManager:
     def __init__(
         self,
